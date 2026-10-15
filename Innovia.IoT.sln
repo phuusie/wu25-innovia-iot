@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1E647E36-BE82-4E07-AF68-CEA4D426B368}"
+	ProjectSection(SolutionItems) = preProject
+		src\Implementation.md = src\Implementation.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innovia.Shared", "src\Innovia.Shared\Innovia.Shared.csproj", "{3870151D-AE90-44C1-B53F-528F518FE0B6}"
 EndProject

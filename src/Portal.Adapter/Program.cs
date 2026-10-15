@@ -5,7 +5,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PortalDbContext>(o =>
     o.UseNpgsql(
         builder.Configuration.GetConnectionString("Db")
-        ?? "Host=localhost;Username=postgres;Password=password;Database=innovia_ingest"
+        ?? "Host=localhost;Port=5434;Username=postgres;Password=password;Database=innovia_ingest"
     )
 );
 var app = builder.Build();

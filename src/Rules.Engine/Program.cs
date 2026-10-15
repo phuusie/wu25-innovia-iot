@@ -31,9 +31,9 @@ builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database", LogLevel.War
 
 // --- Config (with sensible defaults for local dev) ---
 var rulesConn = builder.Configuration.GetConnectionString("RulesDb")
-    ?? "Host=localhost;Username=postgres;Password=password;Database=innovia_rules";
+    ?? "Host=localhost;Port=5434;Username=postgres;Password=password;Database=innovia_rules";
 var ingestConn = builder.Configuration.GetConnectionString("IngestDb")
-    ?? "Host=localhost;Username=postgres;Password=password;Database=innovia_ingest";
+    ?? "Host=localhost;Port=5434;Username=postgres;Password=password;Database=innovia_ingest";
 var hubUrl = builder.Configuration.GetSection("Realtime")["HubUrl"]
     ?? "http://localhost:5103/hub/telemetry";
 

@@ -201,7 +201,7 @@ public class IngestService
         foreach (var m in payload.Metrics)
         {
             _db.Measurements.Add(new MeasurementRow {
-                Time = payload.Timestamp,
+                Time = payload.Timestamp.ToUniversalTime(),
                 TenantId = ids.TenantId,
                 DeviceId = ids.DeviceId,
                 Type = m.Type,
@@ -238,7 +238,8 @@ public class DeviceRegistryClient
     public async Task<(Guid TenantId, Guid DeviceId)> ResolveAsync(string tenantSlug, string deviceSerial)
     {
         // Cache lookups so we don't hit DeviceRegistry on every message
-        if (_cache.TryGetValue(tenantSlug, out var hit)) return hit;
+        var key = $"{tenantSlug}/{deviceSerial}";
+        if (_cache.TryGetValue(key, out var hit)) return hit;
 
         var tenant = await _http.GetFromJsonAsync<TenantDto>($"{_cfg.BaseUrl}/api/tenants/by-slug/{tenantSlug}")
                     ?? throw new InvalidOperationException($"Tenant slug '{tenantSlug}' not found");
@@ -247,7 +248,7 @@ public class DeviceRegistryClient
                     ?? throw new InvalidOperationException($"Device serial '{deviceSerial}' not found in tenant '{tenantSlug}'");
 
         var ids = (tenant.Id, device.Id);
-        _cache[tenantSlug] = ids;
+        _cache[key] = ids;
         return ids;
     }
 
