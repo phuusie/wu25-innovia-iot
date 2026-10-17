@@ -53,3 +53,9 @@
 - **Ändring:** `Time = payload.Timestamp.ToUniversalTime()`
 - **Varför:** Ingest ska normalisera inkommande data. Tiden räknas om till UTC oavsett
   vilken tidszon sensorn använder, både för MQTT och HTTP.
+
+### 7. CORS i Realtime.Hub
+- **Fil:** `src/Realtime.Hub/Program.cs`
+- **Ändring:** `http://localhost:5173` tillagd i `WithOrigins`.
+- **Varför:** innovia-hubs React-frontend körs på port 5173. Utan den raden blockerar
+  webbläsaren SignalR-anslutningen till hubben (same-origin policy).
