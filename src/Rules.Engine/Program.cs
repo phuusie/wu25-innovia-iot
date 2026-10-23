@@ -63,8 +63,39 @@ using (var scope = app.Services.CreateScope())
 // --- Endpoints ---
 // TODO: POST /rules – create a device-scoped rule. Suggested body:
 //   { "tenantId":"...", "deviceId":"...", "type":"temperature", "op":">", "threshold": 28.0 }
+app.MapPost("/rules", async (RulesDbContext db, IngestReadDbContext ingest, RuleRow row) =>
+{
+    row.Id = Guid.NewGuid();
+    
+    row.TenantId = await ingest.Measurements
+        .Where(m => m.DeviceId == row.DeviceId)
+        .Select(m => m.TenantId)
+        .FirstOrDefaultAsync();
+    
+    db.Rules.Add(row);
+    await db.SaveChangesAsync();
+
+    return Results.Created($"/rules/{row.Id}", row);
+});
+
 // TODO: GET /rules – list rules.
+app.MapGet("/rules", async (RulesDbContext db) =>
+{
+    var rules = await db.Rules.ToListAsync();
+    
+    return Results.Ok(rules);
+});
+
 // TODO: GET /alerts – list latest alerts (filter on tenant/device is nice to have).
+app.MapGet("/alerts", async (RulesDbContext db) =>
+{
+    var alerts = await db.Alerts
+        .OrderByDescending(a => a.Time)
+        .Take(10)
+        .ToListAsync();
+    
+    return Results.Ok(alerts);
+});
 
 app.MapGet("/", () => Results.Ok(new { service = "Rules.Engine", status = "ok" }));
 
@@ -168,7 +199,13 @@ public class RuleRow
     public Guid TenantId { get; set; }
     public Guid? DeviceId { get; set; }
     public string Type { get; set; } = ""; // e.g., "temperature"
+    
     // TODO: operator, threshold, enabled, ...
+    public string Operator { get; set; } = "";
+    public double Threshold { get; set; }
+    public bool Enabled { get; set; } = true;
+    public string TenantSlug { get; set; } = "";
+    
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 }
 
@@ -178,8 +215,11 @@ public class AlertRow
     public Guid RuleId { get; set; }
     public Guid TenantId { get; set; }
     public Guid DeviceId { get; set; }
-    public DateTimeOffset Time { get; set; }
+    public DateTimeOffset Time { get; set; } =  DateTimeOffset.UtcNow;
+    
     // TODO: value, severity, message, ...
+    public double Value { get; set; }
+    public string Message { get; set; } = "";
 }
 
 // Mirror of Ingest measurement (read-only model)

@@ -1,0 +1,19 @@
+﻿@BASE = http://localhost:5000
+
+### Skapa regel
+POST {{BASE}}/rules
+Content-Type: application/json
+
+{
+  "tenantSlug": "innovia",
+  "deviceId": "1be4baeb-9f3f-4e02-8fa1-f27609520472",
+  "type": "co2",
+  "operator": ">",
+  "threshold": 1200
+}
+
+### Lista regler
+GET {{BASE}}/rules
+
+### Senaste larm
+GET {{BASE}}/alerts

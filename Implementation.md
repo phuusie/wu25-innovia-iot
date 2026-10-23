@@ -1,5 +1,7 @@
 # Implementation
 
+## G - Krav
+
 ### 1. Startskript
 - **Fil:** [start.ps1](start.ps1) (ny)
 - **Varför:** README:n kräver fyra terminaler i rätt ordning. Skriptet startar Docker
@@ -109,3 +111,6 @@
 - **Varför:** Docker- och Vite-inställningarna ligger nu i samma fil. Vite skickar bara
   `VITE_`-variabler till webbläsaren, så databaslösenordet stannar på servern.
   `.env.example` visar vilka variabler som behövs, eftersom `.env` inte är med i git.
+
+## VG - Krav
+

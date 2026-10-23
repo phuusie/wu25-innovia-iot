@@ -54,5 +54,5 @@ while (true)
         Console.WriteLine($"[{DateTimeOffset.UtcNow:o}] Published to '{topic}': {json}");
     }
 
-    await Task.Delay(TimeSpan.FromSeconds(5));
+    await Task.Delay(TimeSpan.FromSeconds(10));
 }
